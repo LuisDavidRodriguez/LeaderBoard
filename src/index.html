@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Do list</title>
+    <title>Leaderboard</title>
 </head>
 <body>
     <header>
@@ -11,7 +11,26 @@
     </header>
 
     <main>
-        <h1>WebPack template</h1>
+        <h1 class="title">Leaderboard</h1>
+        <section class="container">
+            <article class="table-container">
+                <div class="button-container">
+                    <h3>Resent scores</h3>
+                    <button id="refreshButton" type="button">Refresh</button>
+                </div>
+
+                <ul id="list" class="list">
+                    
+                </ul>
+            </article>
+
+            <form action="#" method="post">
+                <h3>Add your score</h3>
+                <input id="name" type="text" placeholder="Your name" >
+                <input id="score" type="text" placeholder="Your Score">
+                <button id="submitButton" type="submit">Submit</button>
+            </form>
+        </section>
                
     </main>
 
