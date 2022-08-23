@@ -1,14 +1,16 @@
 ![](https://img.shields.io/badge/Microverse-blueviolet)
 
-# WebPack template!
+# Leaderboard!
+
+## Learning objectives
+- Use callbacks and promises.
+- Learn how to use proper ES6 syntax.
+- Use ES6 modules to write modular JavaScript.
+- Use webpack to bundle JavaScript.
 
 > Description the project.
-
-
-
-
-- Demostrate abilities using WebPack.
-
+This project hits an API to save and refresh the users scores.
+![image](https://user-images.githubusercontent.com/105079888/186251316-f3c7d919-31c2-4159-9155-40c0a94ce4f7.png)
 
 
 ## Built With
@@ -19,7 +21,7 @@
 - WebPack
 
 ## Live Demo
-[You can see the demo here]()
+[The demo is not abailable yet]()
 
 
 ## Getting Started
