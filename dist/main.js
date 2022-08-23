@@ -9,6 +9,166 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/main.scss */ "./src/styles/main.scss");
+/* harmony import */ var _modules_listManager_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/listManager.js */ "./src/modules/listManager.js");
+/* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/form.js */ "./src/modules/form.js");
+
+
+
+var listContainer = document.querySelector('#list');
+var listManager = new _modules_listManager_js__WEBPACK_IMPORTED_MODULE_1__["default"](listContainer);
+listManager.addPlayer('Erik', 900);
+listManager.addPlayer('luisda', 1500);
+listManager.addPlayer('federico', 2000);
+(0,_modules_form_js__WEBPACK_IMPORTED_MODULE_2__["default"])(listManager);
+
+/***/ }),
+
+/***/ "./src/modules/form.js":
+/*!*****************************!*\
+  !*** ./src/modules/form.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ listenerSubmit)
+/* harmony export */ });
+var nameInput = document.querySelector('#name');
+var scoreInput = document.querySelector('#score');
+var submitButton = document.querySelector('#submitButton');
+
+function validInputs() {
+  // Check the minimal validations in the html
+  if (!nameInput.validity.valid || !scoreInput.validity.valid) {
+    console.log('Control1');
+    return false;
+  } // Check if any input is empty
+
+
+  if (nameInput.value.trim() === '' || scoreInput.value.trim() === '') {
+    console.log('Control2');
+    return false;
+  }
+
+  var score = scoreInput.value.trim();
+
+  if (/\D/g.test(score)) {
+    console.log('the score is not valid');
+    scoreInput.setCustomValidity('You shall only add numbers here');
+    scoreInput.reportValidity();
+    return false;
+  }
+
+  return true;
+}
+
+var submitCallBack = function submitCallBack(listManager) {
+  if (!validInputs()) return;
+  var nameValue = nameInput.value.trim();
+  var scoreValue = scoreInput.value.trim();
+  nameInput.value = '';
+  scoreInput.value = '';
+  listManager.addPlayer(nameValue, scoreValue);
+};
+
+function listenerSubmit(listManager) {
+  submitButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    submitCallBack(listManager);
+  });
+}
+
+/***/ }),
+
+/***/ "./src/modules/listManager.js":
+/*!************************************!*\
+  !*** ./src/modules/listManager.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ListManager)
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclaration(obj, privateSet); privateSet.add(obj); }
+
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+
+function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
+
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+
+function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
+
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+
+function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+
+var _parentContainer = /*#__PURE__*/new WeakMap();
+
+var _arrScores = /*#__PURE__*/new WeakMap();
+
+var _createDOMelement = /*#__PURE__*/new WeakSet();
+
+var ListManager = /*#__PURE__*/function () {
+  function ListManager(container) {
+    _classCallCheck(this, ListManager);
+
+    _classPrivateMethodInitSpec(this, _createDOMelement);
+
+    _classPrivateFieldInitSpec(this, _parentContainer, {
+      writable: true,
+      value: void 0
+    });
+
+    _classPrivateFieldInitSpec(this, _arrScores, {
+      writable: true,
+      value: []
+    });
+
+    _classPrivateFieldSet(this, _parentContainer, container);
+  }
+
+  _createClass(ListManager, [{
+    key: "addPlayer",
+    value: function addPlayer(name, score) {
+      var object = {
+        name: name,
+        score: score
+      };
+
+      _classPrivateFieldGet(this, _arrScores).push(object);
+
+      var element = _classPrivateMethodGet(this, _createDOMelement, _createDOMelement2).call(this, object);
+
+      _classPrivateFieldGet(this, _parentContainer).append(element);
+    } // eslint-disable-next-line class-methods-use-this
+
+  }]);
+
+  return ListManager;
+}();
+
+function _createDOMelement2(object) {
+  var li = document.createElement('li');
+  var pName = document.createElement('p');
+  var pScore = document.createElement('p');
+  pName.textContent = object.name;
+  pScore.textContent = object.score;
+  li.append(pName, pScore);
+  return li;
+}
+
 
 
 /***/ }),
@@ -32,7 +192,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nul {\n  padding-inline-start: 0;\n  list-style: none;\n  margin-block-start: 0;\n  margin-block-end: 0;\n}\n\na {\n  text-decoration: none;\n  word-wrap: break-word;\n}\n\n::before {\n  box-sizing: border-box;\n}\n\n::after {\n  box-sizing: border-box;\n}\n\nbody {\n  font-family: \"Roboto\", sans-serif;\n}\n\nmain {\n  text-align: center;\n}\n\n.title {\n  margin-bottom: 20%;\n}\n\n.container {\n  display: flex;\n  justify-content: center;\n}\n\n.table-container {\n  min-width: 225px;\n  max-width: 500px;\n  width: 50%;\n  margin: 0 5%;\n}\n.table-container .button-container {\n  display: flex;\n  margin: 5px;\n}\n.table-container .list {\n  border: 1px solid black;\n  min-height: 500px;\n}\n\nform {\n  display: flex;\n  flex-direction: column;\n  margin: 0 5%;\n  width: 50%;\n  max-width: 400px;\n}\nform input {\n  margin: 10px 0;\n}\nform button {\n  width: fit-content;\n  margin-top: 10px;\n  padding: 2px;\n  align-self: flex-end;\n}", "",{"version":3,"sources":["webpack://./src/styles/2_base/_config.scss","webpack://./src/styles/main.scss"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,sBAAA;ACCF;;ADGA;EACE,uBAAA;EACA,gBAAA;EACA,qBAAA;EACA,mBAAA;ACAF;;ADGA;EACE,qBAAA;EACA,qBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;AAtBA;EACE,iCAAA;AAyBF;;AAtBA;EACE,kBAAA;AAyBF;;AAtBA;EACE,kBAAA;AAyBF;;AAtBA;EACE,aAAA;EACA,uBAAA;AAyBF;;AAtBA;EACE,gBAAA;EACA,gBAAA;EACA,UAAA;EACA,YAAA;AAyBF;AAvBE;EACE,aAAA;EACA,WAAA;AAyBJ;AAtBE;EACE,uBAAA;EACA,iBAAA;AAwBJ;;AApBA;EACE,aAAA;EACA,sBAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;AAuBF;AArBE;EACE,cAAA;AAuBJ;AApBE;EACE,kBAAA;EACA,gBAAA;EACA,YAAA;EACA,oBAAA;AAsBJ","sourcesContent":["* {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n//yeah I get ride of that hideous padding once and for all for all my ul!!\r\nul {\r\n  padding-inline-start: 0;\r\n  list-style: none;\r\n  margin-block-start: 0;\r\n  margin-block-end: 0;\r\n}\r\n\r\na {\r\n  text-decoration: none;\r\n  word-wrap: break-word;\r\n}\r\n\r\n::before {\r\n  box-sizing: border-box;\r\n}\r\n\r\n::after {\r\n  box-sizing: border-box;\r\n}\r\n","@import '2_base/config';\n\nbody {\n  font-family: 'Roboto', sans-serif;\n}\n\nmain {\n  text-align: center;\n}\n\n.title {\n  margin-bottom: 20%;\n}\n\n.container {\n  display: flex;\n  justify-content: center;\n}\n  \n.table-container {  \n  min-width: 225px;\n  max-width: 500px;\n  width: 50%;\n  margin: 0 5%;\n\n  .button-container {\n    display: flex;\n    margin: 5px;\n  }\n\n  .list {\n    border: 1px solid black;\n    min-height: 500px;\n  }\n}\n\nform {\n  display: flex;\n  flex-direction: column;\n  margin: 0 5%;\n  width: 50%;\n  max-width: 400px;\n\n  input {\n    margin: 10px 0;\n  }\n\n  button {\n    width: fit-content;\n    margin-top: 10px;\n    padding: 2px;\n    align-self: flex-end;\n  }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nul {\n  padding-inline-start: 0;\n  list-style: none;\n  margin-block-start: 0;\n  margin-block-end: 0;\n}\n\na {\n  text-decoration: none;\n  word-wrap: break-word;\n}\n\n::before {\n  box-sizing: border-box;\n}\n\n::after {\n  box-sizing: border-box;\n}\n\nbody {\n  font-family: \"Roboto\", sans-serif;\n}\n\nmain {\n  text-align: center;\n}\n\n.title {\n  margin-bottom: 3%;\n}\n\n.container {\n  display: flex;\n  justify-content: center;\n}\n\n.table-container {\n  min-width: 225px;\n  max-width: 500px;\n  width: 50%;\n  margin: 0 5%;\n}\n.table-container .button-container {\n  display: flex;\n  margin: 5px;\n}\n.table-container .list {\n  border: 1px solid black;\n  min-height: 500px;\n  padding: 2%;\n}\n.table-container .list li {\n  display: flex;\n}\n.table-container .list li > p {\n  width: 50%;\n}\n\nform {\n  display: flex;\n  flex-direction: column;\n  margin: 0 5%;\n  width: 50%;\n  max-width: 400px;\n}\nform input {\n  margin: 10px 0;\n}\nform button {\n  width: fit-content;\n  margin-top: 10px;\n  padding: 2px;\n  align-self: flex-end;\n}", "",{"version":3,"sources":["webpack://./src/styles/2_base/_config.scss","webpack://./src/styles/main.scss"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,sBAAA;ACCF;;ADGA;EACE,uBAAA;EACA,gBAAA;EACA,qBAAA;EACA,mBAAA;ACAF;;ADGA;EACE,qBAAA;EACA,qBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;AAtBA;EACE,iCAAA;AAyBF;;AAtBA;EACE,kBAAA;AAyBF;;AAtBA;EACE,iBAAA;AAyBF;;AAtBA;EACE,aAAA;EACA,uBAAA;AAyBF;;AAtBA;EACE,gBAAA;EACA,gBAAA;EACA,UAAA;EACA,YAAA;AAyBF;AAvBE;EACE,aAAA;EACA,WAAA;AAyBJ;AAtBE;EACE,uBAAA;EACA,iBAAA;EACA,WAAA;AAwBJ;AAtBI;EACE,aAAA;AAwBN;AAtBM;EACE,UAAA;AAwBR;;AAlBA;EACE,aAAA;EACA,sBAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;AAqBF;AAnBE;EACE,cAAA;AAqBJ;AAlBE;EACE,kBAAA;EACA,gBAAA;EACA,YAAA;EACA,oBAAA;AAoBJ","sourcesContent":["* {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n//yeah I get ride of that hideous padding once and for all for all my ul!!\r\nul {\r\n  padding-inline-start: 0;\r\n  list-style: none;\r\n  margin-block-start: 0;\r\n  margin-block-end: 0;\r\n}\r\n\r\na {\r\n  text-decoration: none;\r\n  word-wrap: break-word;\r\n}\r\n\r\n::before {\r\n  box-sizing: border-box;\r\n}\r\n\r\n::after {\r\n  box-sizing: border-box;\r\n}\r\n","@import '2_base/config';\r\n\r\nbody {\r\n  font-family: 'Roboto', sans-serif;\r\n}\r\n\r\nmain {\r\n  text-align: center;\r\n}\r\n\r\n.title {\r\n  margin-bottom: 3%;\r\n}\r\n\r\n.container {\r\n  display: flex;\r\n  justify-content: center;\r\n}\r\n  \r\n.table-container {  \r\n  min-width: 225px;\r\n  max-width: 500px;\r\n  width: 50%;\r\n  margin: 0 5%;\r\n\r\n  .button-container {\r\n    display: flex;\r\n    margin: 5px;\r\n  }\r\n\r\n  .list {\r\n    border: 1px solid black;\r\n    min-height: 500px;\r\n    padding: 2%;\r\n\r\n    li {\r\n      display: flex;\r\n\r\n      > p {\r\n        width: 50%;\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\nform {\r\n  display: flex;\r\n  flex-direction: column;\r\n  margin: 0 5%;\r\n  width: 50%;\r\n  max-width: 400px;\r\n\r\n  input {\r\n    margin: 10px 0;\r\n  }\r\n\r\n  button {\r\n    width: fit-content;\r\n    margin-top: 10px;\r\n    padding: 2px;\r\n    align-self: flex-end;\r\n  }\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -16,8 +16,8 @@ main {
   display: flex;
   justify-content: center;
 }
-  
-.table-container {  
+
+.table-container {
   min-width: 225px;
   max-width: 500px;
   width: 50%;
@@ -31,6 +31,19 @@ main {
   .list {
     border: 1px solid black;
     min-height: 500px;
+    padding: 2%;
+
+    > :nth-child(odd) {
+      background-color: lightgray;
+    }
+
+    li {
+      display: flex;
+
+      > p {
+        width: 50%;
+      }
+    }
   }
 }
 
