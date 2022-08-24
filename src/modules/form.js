@@ -1,7 +1,7 @@
 const nameInput = document.querySelector('#name');
 const scoreInput = document.querySelector('#score');
 
-function validInputs() {
+const validInputs = () => {
   // Check the minimal validations in the html
   if (!nameInput.validity.valid || !scoreInput.validity.valid) return false;
 
@@ -15,9 +15,9 @@ function validInputs() {
   }
 
   return true;
-}
+};
 
-export default function submit(callBack) {
+const submit = (callBack) => {
   if (!validInputs()) return;
 
   const nameValue = nameInput.value.trim();
@@ -25,4 +25,6 @@ export default function submit(callBack) {
   nameInput.value = '';
   scoreInput.value = '';
   callBack(nameValue, scoreValue);
-}
+};
+
+export default submit;

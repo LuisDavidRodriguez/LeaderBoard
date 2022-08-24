@@ -27,7 +27,6 @@ const setScores = async (user, score) => {
 
   result.json().then((data) => {
     console.log(data);
-    return data;
   });
 };
 
