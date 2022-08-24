@@ -1,12 +1,21 @@
 import './styles/main.scss';
 import ListManager from './modules/listManager.js';
-import listenerSubmit from './modules/form.js';
+import submit from './modules/form.js';
+import { getScores, setScores } from './modules/leaderApi.js';
 
+const submitButton = document.querySelector('#submitButton');
+const refreshButton = document.querySelector('#refreshButton');
 const listContainer = document.querySelector('#list');
 const listManager = new ListManager(listContainer);
 
-listManager.addPlayer('Erik', 900);
-listManager.addPlayer('luisda', 1500);
-listManager.addPlayer('federico', 2000);
+getScores(listManager);
 
-listenerSubmit(listManager);
+submitButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  submit(setScores);
+});
+
+refreshButton.addEventListener('click', () => {
+  listManager.clearContainer();
+  getScores(listManager);
+});
