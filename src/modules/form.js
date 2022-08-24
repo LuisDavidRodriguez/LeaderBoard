@@ -1,6 +1,5 @@
 const nameInput = document.querySelector('#name');
 const scoreInput = document.querySelector('#score');
-const submitButton = document.querySelector('#submitButton');
 
 function validInputs() {
   // Check the minimal validations in the html
@@ -18,20 +17,12 @@ function validInputs() {
   return true;
 }
 
-const submitCallBack = (listManager) => {
+export default function submit(callBack) {
   if (!validInputs()) return;
 
   const nameValue = nameInput.value.trim();
   const scoreValue = scoreInput.value.trim();
   nameInput.value = '';
   scoreInput.value = '';
-
-  listManager.addPlayer(nameValue, scoreValue);
-};
-
-export default function listenerSubmit(listManager) {
-  submitButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    submitCallBack(listManager);
-  });
+  callBack(nameValue, scoreValue);
 }

@@ -1,28 +1,36 @@
 export default class ListManager {
   #parentContainer;
 
-  #arrScores = [];
-
   constructor(container) {
     this.#parentContainer = container;
   }
 
-  addPlayer(name, score) {
-    const object = { name, score };
-    this.#arrScores.push(object);
+  refresh(data) {
+    this.clearContainer();
+    data.forEach((player) => {
+      this.addPlayer(player);
+    });
+  }
+
+  addPlayer({ user, score }) {
+    const object = { user, score };
     const element = this.#createDOMelement(object);
     this.#parentContainer.append(element);
+  }
+
+  clearContainer() {
+    this.#parentContainer.textContent = '';
   }
 
   // eslint-disable-next-line class-methods-use-this
   #createDOMelement(object) {
     const li = document.createElement('li');
-    const pName = document.createElement('p');
+    const pUser = document.createElement('p');
     const pScore = document.createElement('p');
 
-    pName.textContent = object.name;
+    pUser.textContent = object.user;
     pScore.textContent = object.score;
-    li.append(pName, pScore);
+    li.append(pUser, pScore);
     return li;
   }
 }
