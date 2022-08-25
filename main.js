@@ -11,7 +11,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/main.scss */ "./src/styles/main.scss");
 /* harmony import */ var _modules_listManager_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/listManager.js */ "./src/modules/listManager.js");
 /* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/form.js */ "./src/modules/form.js");
-/* harmony import */ var _modules_leaderApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/leaderApi */ "./src/modules/leaderApi.js");
+/* harmony import */ var _modules_leaderApi_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/leaderApi.js */ "./src/modules/leaderApi.js");
+/* harmony import */ var _assets_sounds_background_mp3__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./assets/sounds/background.mp3 */ "./src/assets/sounds/background.mp3");
+/* harmony import */ var _assets_sounds_lion_roaring_sound_mp3__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./assets/sounds/lion-roaring-sound.mp3 */ "./src/assets/sounds/lion-roaring-sound.mp3");
+/* harmony import */ var _assets_sounds_submit_mp3__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./assets/sounds/submit.mp3 */ "./src/assets/sounds/submit.mp3");
+
+
+
 
 
 
@@ -20,14 +26,29 @@ var submitButton = document.querySelector('#submitButton');
 var refreshButton = document.querySelector('#refreshButton');
 var listContainer = document.querySelector('#list');
 var listManager = new _modules_listManager_js__WEBPACK_IMPORTED_MODULE_1__["default"](listContainer);
-(0,_modules_leaderApi__WEBPACK_IMPORTED_MODULE_3__.getScores)(listManager);
+var audio = new Audio(_assets_sounds_background_mp3__WEBPACK_IMPORTED_MODULE_4__["default"]);
+var roar = new Audio(_assets_sounds_lion_roaring_sound_mp3__WEBPACK_IMPORTED_MODULE_5__["default"]);
+var birds = new Audio(_assets_sounds_submit_mp3__WEBPACK_IMPORTED_MODULE_6__["default"]);
+audio.volume = 0.06;
+roar.volume = 0.2;
+birds.volume = 0.2;
+(0,_modules_leaderApi_js__WEBPACK_IMPORTED_MODULE_3__.getScores)(listManager);
 submitButton.addEventListener('click', function (event) {
   event.preventDefault();
-  (0,_modules_form_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_modules_leaderApi__WEBPACK_IMPORTED_MODULE_3__.setScores);
+  birds.play();
+  (0,_modules_form_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_modules_leaderApi_js__WEBPACK_IMPORTED_MODULE_3__.setScores);
 });
 refreshButton.addEventListener('click', function () {
   listManager.clearContainer();
-  (0,_modules_leaderApi__WEBPACK_IMPORTED_MODULE_3__.getScores)(listManager);
+  roar.play();
+  (0,_modules_leaderApi_js__WEBPACK_IMPORTED_MODULE_3__.getScores)(listManager);
+  setTimeout(function () {
+    roar.pause();
+    roar.currentTime = 0;
+  }, 1800);
+});
+window.addEventListener('mousemove', function () {
+  audio.play();
 });
 
 /***/ }),
@@ -40,12 +61,12 @@ refreshButton.addEventListener('click', function () {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ submit)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var nameInput = document.querySelector('#name');
 var scoreInput = document.querySelector('#score');
 
-function validInputs() {
+var validInputs = function validInputs() {
   // Check the minimal validations in the html
   if (!nameInput.validity.valid || !scoreInput.validity.valid) return false; // Check if any input is empty
 
@@ -57,16 +78,18 @@ function validInputs() {
   }
 
   return true;
-}
+};
 
-function submit(callBack) {
+var submit = function submit(callBack) {
   if (!validInputs()) return;
   var nameValue = nameInput.value.trim();
   var scoreValue = scoreInput.value.trim();
   nameInput.value = '';
   scoreInput.value = '';
   callBack(nameValue, scoreValue);
-}
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (submit);
 
 /***/ }),
 
@@ -104,7 +127,7 @@ var GAME_ID = 't0bQKaYMl777YYTlmXPl';
 
 var createNewGame = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var bodyCreate, result;
+    var bodyCreate, result, data;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -121,12 +144,15 @@ var createNewGame = /*#__PURE__*/function () {
 
           case 3:
             result = _context.sent;
-            console.log(result);
-            result.json().then(function (data) {
-              console.log(data);
-            });
+            _context.next = 6;
+            return result.json();
 
           case 6:
+            data = _context.sent;
+            console.log(result);
+            console.log(data);
+
+          case 9:
           case "end":
             return _context.stop();
         }
@@ -141,28 +167,43 @@ var createNewGame = /*#__PURE__*/function () {
 
 var getScores = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(listManager) {
-    var result;
+    var result, data;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            _context2.next = 2;
+            _context2.prev = 0;
+            _context2.next = 3;
             return fetch(SCORES_URL(GAME_ID), {
               method: 'GET'
             });
 
-          case 2:
+          case 3:
             result = _context2.sent;
-            result.json().then(function (data) {
-              listManager.refresh(data.result);
-            });
+            _context2.next = 6;
+            return result.json();
 
-          case 4:
+          case 6:
+            data = _context2.sent;
+            console.log(result);
+            console.log(data.result);
+            console.log(result.status); // 201 ok etc
+
+            listManager.refresh(data.result);
+            _context2.next = 16;
+            break;
+
+          case 13:
+            _context2.prev = 13;
+            _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
+
+          case 16:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2);
+    }, _callee2, null, [[0, 13]]);
   }));
 
   return function getScores(_x) {
@@ -172,7 +213,7 @@ var getScores = /*#__PURE__*/function () {
 
 var setScores = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(user, score) {
-    var body, result;
+    var body, result, data;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -190,12 +231,21 @@ var setScores = /*#__PURE__*/function () {
 
           case 3:
             result = _context3.sent;
-            result.json().then(function (data) {
-              console.log(data);
-              return data;
-            });
+            _context3.next = 6;
+            return result.json();
 
-          case 5:
+          case 6:
+            data = _context3.sent;
+            console.log(result.status); // 201 ok etc
+
+            console.log(result);
+            console.log(data);
+
+            if (result.status === 201) {
+              console.log('success');
+            }
+
+          case 11:
           case "end":
             return _context3.stop();
         }
@@ -327,12 +377,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/getUrl.js */ "./node_modules/css-loader/dist/runtime/getUrl.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__);
 // Imports
 
 
+
+var ___CSS_LOADER_URL_IMPORT_0___ = new URL(/* asset import */ __webpack_require__(/*! ../assets/eduardo-quesada-background.jpg */ "./src/assets/eduardo-quesada-background.jpg"), __webpack_require__.b);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+var ___CSS_LOADER_URL_REPLACEMENT_0___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_0___);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nul {\n  padding-inline-start: 0;\n  list-style: none;\n  margin-block-start: 0;\n  margin-block-end: 0;\n}\n\na {\n  text-decoration: none;\n  word-wrap: break-word;\n}\n\n::before {\n  box-sizing: border-box;\n}\n\n::after {\n  box-sizing: border-box;\n}\n\nbody {\n  font-family: \"Roboto\", sans-serif;\n}\n\nmain {\n  text-align: center;\n}\n\n.title {\n  margin-bottom: 3%;\n}\n\n.container {\n  display: flex;\n  justify-content: center;\n}\n\n.table-container {\n  min-width: 225px;\n  max-width: 500px;\n  width: 50%;\n  margin: 0 5%;\n}\n.table-container .button-container {\n  display: flex;\n  margin: 5px;\n}\n.table-container .list {\n  border: 1px solid black;\n  min-height: 500px;\n  padding: 2%;\n}\n.table-container .list > :nth-child(odd) {\n  background-color: lightgray;\n}\n.table-container .list li {\n  display: flex;\n}\n.table-container .list li > p {\n  width: 50%;\n}\n\nform {\n  display: flex;\n  flex-direction: column;\n  margin: 0 5%;\n  width: 50%;\n  max-width: 400px;\n}\nform input {\n  margin: 10px 0;\n}\nform button {\n  width: fit-content;\n  margin-top: 10px;\n  padding: 2px;\n  align-self: flex-end;\n}", "",{"version":3,"sources":["webpack://./src/styles/2_base/_config.scss","webpack://./src/styles/main.scss"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,sBAAA;ACCF;;ADGA;EACE,uBAAA;EACA,gBAAA;EACA,qBAAA;EACA,mBAAA;ACAF;;ADGA;EACE,qBAAA;EACA,qBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;AAtBA;EACE,iCAAA;AAyBF;;AAtBA;EACE,kBAAA;AAyBF;;AAtBA;EACE,iBAAA;AAyBF;;AAtBA;EACE,aAAA;EACA,uBAAA;AAyBF;;AAtBA;EACE,gBAAA;EACA,gBAAA;EACA,UAAA;EACA,YAAA;AAyBF;AAvBE;EACE,aAAA;EACA,WAAA;AAyBJ;AAtBE;EACE,uBAAA;EACA,iBAAA;EACA,WAAA;AAwBJ;AAtBI;EACE,2BAAA;AAwBN;AArBI;EACE,aAAA;AAuBN;AArBM;EACE,UAAA;AAuBR;;AAjBA;EACE,aAAA;EACA,sBAAA;EACA,YAAA;EACA,UAAA;EACA,gBAAA;AAoBF;AAlBE;EACE,cAAA;AAoBJ;AAjBE;EACE,kBAAA;EACA,gBAAA;EACA,YAAA;EACA,oBAAA;AAmBJ","sourcesContent":["* {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n//yeah I get ride of that hideous padding once and for all for all my ul!!\r\nul {\r\n  padding-inline-start: 0;\r\n  list-style: none;\r\n  margin-block-start: 0;\r\n  margin-block-end: 0;\r\n}\r\n\r\na {\r\n  text-decoration: none;\r\n  word-wrap: break-word;\r\n}\r\n\r\n::before {\r\n  box-sizing: border-box;\r\n}\r\n\r\n::after {\r\n  box-sizing: border-box;\r\n}\r\n","@import '2_base/config';\r\n\r\nbody {\r\n  font-family: 'Roboto', sans-serif;\r\n}\r\n\r\nmain {\r\n  text-align: center;\r\n}\r\n\r\n.title {\r\n  margin-bottom: 3%;\r\n}\r\n\r\n.container {\r\n  display: flex;\r\n  justify-content: center;\r\n}\r\n\r\n.table-container {\r\n  min-width: 225px;\r\n  max-width: 500px;\r\n  width: 50%;\r\n  margin: 0 5%;\r\n\r\n  .button-container {\r\n    display: flex;\r\n    margin: 5px;\r\n  }\r\n\r\n  .list {\r\n    border: 1px solid black;\r\n    min-height: 500px;\r\n    padding: 2%;\r\n\r\n    > :nth-child(odd) {\r\n      background-color: lightgray;\r\n    }\r\n\r\n    li {\r\n      display: flex;\r\n\r\n      > p {\r\n        width: 50%;\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\nform {\r\n  display: flex;\r\n  flex-direction: column;\r\n  margin: 0 5%;\r\n  width: 50%;\r\n  max-width: 400px;\r\n\r\n  input {\r\n    margin: 10px 0;\r\n  }\r\n\r\n  button {\r\n    width: fit-content;\r\n    margin-top: 10px;\r\n    padding: 2px;\r\n    align-self: flex-end;\r\n  }\r\n}\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nul {\n  padding-inline-start: 0;\n  list-style: none;\n  margin-block-start: 0;\n  margin-block-end: 0;\n}\n\na {\n  text-decoration: none;\n  word-wrap: break-word;\n}\n\n::before {\n  box-sizing: border-box;\n}\n\n::after {\n  box-sizing: border-box;\n}\n\n.button {\n  color: white;\n  font-family: Helvetica, sans-serif;\n  font-weight: bold;\n  font-size: 1.5em;\n  text-align: center;\n  background-color: #ffA12b;\n  position: relative;\n  padding: 3% 5%;\n  -webkit-box-shadow: inset 0 1px 0 #fffbf7, 0 10px 0 #915100;\n  -moz-box-shadow: inset 0 1px 0 #fffbf7, 0 10px 0 #915100;\n  box-shadow: inset 0 1px 0 #fffbf7, 0 10px 0 #915100;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  border-radius: 5px;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  text-shadow: 0px 1px 0px #000;\n  filter: dropshadow(color=#000, offx=0px, offy=1px);\n}\n.button:hover {\n  cursor: pointer;\n}\n.button:active {\n  top: 10px;\n  background-color: #ffA12b;\n  -webkit-box-shadow: inset 0 1px 0 #fffbf7, inset 0 -3px 0 #915100;\n  -moz-box-shadow: inset 0 1px 0 #fffbf7, inset 0 -3px 0 #915100;\n  box-shadow: inset 0 1px 0 #fffbf7, inset 0 -3px 0 #915100;\n}\n\n.form__button {\n  width: fit-content;\n  align-self: flex-end;\n  padding: 1% 3%;\n}\n\nbody {\n  font-family: \"Roboto\", sans-serif;\n  background: url(" + ___CSS_LOADER_URL_REPLACEMENT_0___ + ") no-repeat;\n  background-size: cover;\n  height: 100vh;\n}\n\nmain {\n  text-align: center;\n}\n\n.title {\n  margin-bottom: 3%;\n  text-shadow: 3px 3px 5px rgb(255, 253, 253), -3px -3px 5px rgb(255, 253, 253);\n}\n\n.container {\n  display: flex;\n  justify-content: center;\n}\n\n.table-container {\n  min-width: 225px;\n  max-width: 500px;\n  width: 50%;\n  margin: 0 5%;\n  background-color: rgba(171, 217, 95, 0.7);\n  border-radius: 5px;\n}\n.table-container .button-container {\n  display: flex;\n  justify-content: space-evenly;\n  align-items: center;\n  margin: 5px;\n}\n.table-container .list {\n  min-height: 500px;\n  padding: 2%;\n  max-height: 70vh;\n  overflow-y: auto;\n  margin: 10px 0;\n}\n.table-container .list > :nth-child(odd) {\n  background-color: rgba(106, 140, 48, 0.8);\n}\n.table-container .list li {\n  display: flex;\n  min-height: 40px;\n  align-items: center;\n}\n.table-container .list li > p {\n  width: 50%;\n}\n\nform {\n  display: flex;\n  flex-direction: column;\n  height: fit-content;\n  width: 50%;\n  padding: 20px;\n  margin: 0 5%;\n  max-width: 400px;\n  background-color: rgba(171, 217, 95, 0.7);\n  border-radius: 5px;\n}\nform input {\n  margin: 10px 0;\n  border: none;\n  padding: 3px;\n  border-radius: 5px;\n  box-shadow: -1px -1px 5px 1px #6a8c30, 3px 4px 2px 2px #6a8c30;\n}", "",{"version":3,"sources":["webpack://./src/styles/2_base/_config.scss","webpack://./src/styles/main.scss","webpack://./src/styles/5_components/buttons.scss","webpack://./src/styles/1_abstracts/variables.scss"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,sBAAA;ACCF;;ADGA;EACE,uBAAA;EACA,gBAAA;EACA,qBAAA;EACA,mBAAA;ACAF;;ADGA;EACE,qBAAA;EACA,qBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;ADGA;EACE,sBAAA;ACAF;;ACKA;EACE,YAAA;EACA,kCAAA;EACA,iBAAA;EACA,gBAAA;EACA,kBAAA;EACA,yBChCU;EDiCV,kBAAA;EACA,cAAA;EAhCA,2DADS;EAET,wDAFS;EAGT,mDAHS;EAcT,0BAD4B;EAE5B,uBAF4B;EAG5B,kBAH4B;EAO5B,6CAAA;EACA,6BAAA;EACA,kDAAA;ADkBF;ACFE;EACE,eAAA;ADIJ;ACDE;EACE,SAAA;EACA,yBC7CQ;EDSV,iEADS;EAET,8DAFS;EAGT,yDAHS;AD2CX;;ACDA;EACE,kBAAA;EACA,oBAAA;EACA,cAAA;ADIF;;AAxDA;EACE,iCAAA;EACA,6DAAA;EACA,sBAAA;EACA,aAAA;AA2DF;;AAxDA;EACE,kBAAA;AA2DF;;AAxDA;EACE,iBAAA;EACA,6EAAA;AA2DF;;AAxDA;EACE,aAAA;EACA,uBAAA;AA2DF;;AAxDA;EACE,gBAAA;EACA,gBAAA;EACA,UAAA;EACA,YAAA;EACA,yCAAA;EACA,kBAAA;AA2DF;AAzDE;EACE,aAAA;EACA,6BAAA;EACA,mBAAA;EACA,WAAA;AA2DJ;AAxDE;EACE,iBAAA;EACA,WAAA;EACA,gBAAA;EACA,gBAAA;EACA,cAAA;AA0DJ;AAxDI;EACE,yCAAA;AA0DN;AAvDI;EACE,aAAA;EACA,gBAAA;EACA,mBAAA;AAyDN;AAvDM;EACE,UAAA;AAyDR;;AAnDA;EACE,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,UAAA;EACA,aAAA;EACA,YAAA;EACA,gBAAA;EACA,yCAAA;EACA,kBAAA;AAsDF;AApDE;EACE,cAAA;EACA,YAAA;EACA,YAAA;EACA,kBAAA;EACA,8DAAA;AAsDJ","sourcesContent":["* {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n//yeah I get ride of that hideous padding once and for all for all my ul!!\r\nul {\r\n  padding-inline-start: 0;\r\n  list-style: none;\r\n  margin-block-start: 0;\r\n  margin-block-end: 0;\r\n}\r\n\r\na {\r\n  text-decoration: none;\r\n  word-wrap: break-word;\r\n}\r\n\r\n::before {\r\n  box-sizing: border-box;\r\n}\r\n\r\n::after {\r\n  box-sizing: border-box;\r\n}\r\n","@use '1_abstracts/variables.scss' as v;\r\n@import '2_base/config';\r\n@import '5_components/buttons.scss';\r\n\r\nbody {\r\n  font-family: 'Roboto', sans-serif;\r\n  background: url('../assets/eduardo-quesada-background.jpg') no-repeat;\r\n  background-size: cover;\r\n  height: 100vh;\r\n}\r\n\r\nmain {\r\n  text-align: center;\r\n}\r\n\r\n.title {\r\n  margin-bottom: 3%;\r\n  text-shadow: 3px 3px 5px rgb(255, 253, 253), -3px -3px 5px rgb(255, 253, 253);\r\n}\r\n\r\n.container {\r\n  display: flex;\r\n  justify-content: center;\r\n}\r\n\r\n.table-container {\r\n  min-width: 225px;\r\n  max-width: 500px;\r\n  width: 50%;\r\n  margin: 0 5%;\r\n  background-color: transparentize($color: v.$colorPrimary, $amount: 0.3);\r\n  border-radius: 5px;\r\n\r\n  .button-container {\r\n    display: flex;\r\n    justify-content: space-evenly;\r\n    align-items: center;\r\n    margin: 5px;\r\n  }\r\n\r\n  .list {\r\n    min-height: 500px;\r\n    padding: 2%;\r\n    max-height: 70vh;\r\n    overflow-y: auto;\r\n    margin: 10px 0;\r\n\r\n    > :nth-child(odd) {\r\n      background-color: transparentize(v.$colorDark, 0.2);\r\n    }\r\n\r\n    li {\r\n      display: flex;\r\n      min-height: 40px;\r\n      align-items: center;\r\n\r\n      > p {\r\n        width: 50%;\r\n      }\r\n    }\r\n  }\r\n}\r\n\r\nform {\r\n  display: flex;\r\n  flex-direction: column;\r\n  height: fit-content;\r\n  width: 50%;\r\n  padding: 20px;\r\n  margin: 0 5%;\r\n  max-width: 400px;\r\n  background-color: transparentize($color: v.$colorPrimary, $amount: 0.3);\r\n  border-radius: 5px;\r\n\r\n  input {\r\n    margin: 10px 0;\r\n    border: none;\r\n    padding: 3px;\r\n    border-radius: 5px;\r\n    box-shadow: -1px -1px 5px 1px v.$colorDark , 3px 4px 2px 2px v.$colorDark;\r\n  }\r\n}\r\n","@use '../1_abstracts/variables.scss' as v;\n// https://dev.to/webdeasy/top-20-css-buttons-animations-f41\n\n@mixin boxShadow {\n  $shadow: inset 0 1px 0 lighten(v.$colorBack, 40%), 0 10px 0 darken(v.$colorBack, 30%);\n  -webkit-box-shadow: $shadow;\n  -moz-box-shadow: $shadow;\n  box-shadow: $shadow;\n}\n\n@mixin boxShadowActive {\n  $shadow: inset 0 1px 0 lighten(v.$colorBack, 40%), inset 0 -3px 0 darken(v.$colorBack, 30%);\n  -webkit-box-shadow: $shadow;\n  -moz-box-shadow: $shadow;\n  box-shadow: $shadow;\n}\n\n@mixin borderRadius ($radius: 5px) {\n  -webkit-border-radius: $radius;\n  -moz-border-radius: $radius;\n  border-radius: $radius;\n}\n\n@mixin textShadow {\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  text-shadow: 0px 1px 0px #000;\n  filter: dropshadow(color=#000, offx=0px, offy=1px);\n}\n\n.button {\n  color:white;\n  font-family: Helvetica, sans-serif;\n  font-weight: bold;\n  font-size: 1.5em;\n  text-align: center;\n  background-color: v.$colorBack;\n  position: relative;\n  padding: 3% 5%;\n  @include boxShadow();\n  @include borderRadius();\n  @include textShadow();\n\n  &:hover {\n    cursor: pointer;\n  }\n\n  &:active {\n    top:10px;\n    background-color: v.$colorBack;\n    @include boxShadowActive();\n  }\n}\n\n.form__button {\n  width: fit-content;\n  align-self: flex-end;\n  padding: 1% 3%;\n}\n","$colorPrimary: #abd95f;\n$colorDark: #6a8c30;\n$colorComplementary: #ad00db;\n$colorBack: #ffA12b;"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -450,6 +505,44 @@ module.exports = function (cssWithMappingToString) {
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/runtime/getUrl.js":
+/*!********************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/getUrl.js ***!
+  \********************************************************/
+/***/ ((module) => {
+
+
+
+module.exports = function (url, options) {
+  if (!options) {
+    options = {};
+  }
+
+  if (!url) {
+    return url;
+  }
+
+  url = String(url.__esModule ? url.default : url); // If url is already wrapped in quotes, remove them
+
+  if (/^['"].*['"]$/.test(url)) {
+    url = url.slice(1, -1);
+  }
+
+  if (options.hash) {
+    url += options.hash;
+  } // Should url be wrapped?
+  // See https://drafts.csswg.org/css-values-3/#urls
+
+
+  if (/["'() \t\n]|(%20)/.test(url) || options.needQuotes) {
+    return "\"".concat(url.replace(/"/g, '\\"').replace(/\n/g, "\\n"), "\"");
+  }
+
+  return url;
+};
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/runtime/sourceMaps.js":
 /*!************************************************************!*\
   !*** ./node_modules/css-loader/dist/runtime/sourceMaps.js ***!
@@ -478,6 +571,48 @@ module.exports = function (item) {
 
   return [content].join("\n");
 };
+
+/***/ }),
+
+/***/ "./src/assets/sounds/background.mp3":
+/*!******************************************!*\
+  !*** ./src/assets/sounds/background.mp3 ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "background.mp3");
+
+/***/ }),
+
+/***/ "./src/assets/sounds/lion-roaring-sound.mp3":
+/*!**************************************************!*\
+  !*** ./src/assets/sounds/lion-roaring-sound.mp3 ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "lion-roaring-sound.mp3");
+
+/***/ }),
+
+/***/ "./src/assets/sounds/submit.mp3":
+/*!**************************************!*\
+  !*** ./src/assets/sounds/submit.mp3 ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "submit.mp3");
 
 /***/ }),
 
@@ -838,6 +973,16 @@ function styleTagTransform(css, styleElement) {
 }
 
 module.exports = styleTagTransform;
+
+/***/ }),
+
+/***/ "./src/assets/eduardo-quesada-background.jpg":
+/*!***************************************************!*\
+  !*** ./src/assets/eduardo-quesada-background.jpg ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "eduardo-quesada-background.jpg";
 
 /***/ })
 
