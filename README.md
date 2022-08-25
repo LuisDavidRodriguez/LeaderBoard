@@ -10,7 +10,9 @@
 
 > Description the project.
 This project hits an API to save and refresh the users scores.
-![image](https://user-images.githubusercontent.com/105079888/186251316-f3c7d919-31c2-4159-9155-40c0a94ce4f7.png)
+![image](https://user-images.githubusercontent.com/105079888/186764382-a6e03a89-2a55-4148-b6fb-cd956911bbd1.png)
+![image](https://user-images.githubusercontent.com/105079888/186764469-e3790b17-cb52-4fbc-b2db-3591a4eb47d7.png)
+
 
 
 ## Built With
