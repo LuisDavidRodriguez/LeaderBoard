@@ -1,3 +1,5 @@
+@use '../1_abstracts/mixin.scss';
+
 * {
   margin: 0;
   padding: 0;
@@ -23,4 +25,12 @@ a {
 
 ::after {
   box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+
+  @include mixin.desktop {
+    font-size: 16px;
+  }
 }

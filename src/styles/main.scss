@@ -1,7 +1,14 @@
+@use '1_abstracts/variables.scss' as v;
+@use '1_abstracts/mixin';
+
 @import '2_base/config';
+@import '5_components/buttons.scss';
 
 body {
   font-family: 'Roboto', sans-serif;
+  background: url('../assets/eduardo-quesada-background.jpg') no-repeat;
+  background-size: cover;
+  height: 100vh;
 }
 
 main {
@@ -10,35 +17,53 @@ main {
 
 .title {
   margin-bottom: 3%;
+  text-shadow: 3px 3px 5px rgb(255, 253, 253), -3px -3px 5px rgb(255, 253, 253);
 }
 
 .container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+
+  @include mixin.desktop {
+    flex-direction: row;
+  }
 }
 
 .table-container {
   min-width: 225px;
   max-width: 500px;
-  width: 50%;
-  margin: 0 5%;
+  width: 90%;
+  margin: 0 auto;
+  background-color: transparentize($color: v.$colorPrimary, $amount: 0.3);
+  border-radius: 5px;
+
+  @include mixin.desktop {
+    width: 50%;
+  }
 
   .button-container {
     display: flex;
+    justify-content: space-evenly;
+    align-items: center;
     margin: 5px;
   }
 
   .list {
-    border: 1px solid black;
     min-height: 500px;
     padding: 2%;
+    max-height: 50vh;
+    overflow-y: auto;
+    margin: 10px 0;
 
     > :nth-child(odd) {
-      background-color: lightgray;
+      background-color: transparentize(v.$colorDark, 0.2);
     }
 
     li {
       display: flex;
+      min-height: 40px;
+      align-items: center;
 
       > p {
         width: 50%;
@@ -50,18 +75,23 @@ main {
 form {
   display: flex;
   flex-direction: column;
-  margin: 0 5%;
-  width: 50%;
+  width: 90%;
+  height: min-content;
+  padding: 20px;
+  margin: 3% auto;
   max-width: 400px;
+  background-color: transparentize($color: v.$colorPrimary, $amount: 0.3);
+  border-radius: 5px;
+
+  @include mixin.desktop {
+    width: 50%;
+  }
 
   input {
     margin: 10px 0;
-  }
-
-  button {
-    width: fit-content;
-    margin-top: 10px;
-    padding: 2px;
-    align-self: flex-end;
+    border: none;
+    padding: 3px;
+    border-radius: 5px;
+    box-shadow: -1px -1px 5px 1px v.$colorDark, 3px 4px 2px 2px v.$colorDark;
   }
 }
