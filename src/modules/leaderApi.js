@@ -7,27 +7,37 @@ const GAME_ID = 't0bQKaYMl777YYTlmXPl';
 const createNewGame = async () => {
   const bodyCreate = JSON.stringify({ name: 'luisda' });
   const result = await fetch(GAMES_URL, { method: 'POST', bodyCreate, headers });
+  const data = await result.json();
   console.log(result);
-  result.json().then((data) => {
-    console.log(data);
-  });
+  console.log(data);
 };
 
 const getScores = async (listManager) => {
-  const result = await fetch(SCORES_URL(GAME_ID), { method: 'GET' });
+  try {
+    const result = await fetch(SCORES_URL(GAME_ID), { method: 'GET' });
+    const data = await result.json();
+    console.log(result);
+    console.log(data.result);
+    console.log(result.status); // 201 ok etc
 
-  result.json().then((data) => {
     listManager.refresh(data.result);
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const setScores = async (user, score) => {
   const body = JSON.stringify({ user, score });
   const result = await fetch(SCORES_URL(GAME_ID), { method: 'POST', body, headers });
+  const data = await result.json();
 
-  result.json().then((data) => {
-    console.log(data);
-  });
+  console.log(result.status); // 201 ok etc
+  console.log(result);
+  console.log(data);
+
+  if (result.status === 201) {
+    console.log('success');
+  }
 };
 
 export { createNewGame, getScores, setScores };
